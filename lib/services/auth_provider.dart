@@ -52,10 +52,11 @@ class AuthProvider extends ChangeNotifier {
           throw Exception(error.message);
         },
         codeSent: (verificationId, forceResendingToken) {
+
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => OtpScreen(verificationId: verificationId),
+              builder: (context) => OtpScreen(verificationId: verificationId,phoneNumber: phoneNumber),
             ),
           );
         },

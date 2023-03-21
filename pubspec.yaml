@@ -45,10 +45,16 @@ dependencies:
   provider:
   pinput:
   image_picker: ^0.8.6+4
+  flutter_slidable:
+  hive:
+  hive_flutter:
+  flutter_heatmap_calendar: 
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  hive_generator:
+  build_runner:
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is

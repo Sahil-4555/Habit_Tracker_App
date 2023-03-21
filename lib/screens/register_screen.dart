@@ -154,7 +154,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 SizedBox(
                   width: double.infinity,
                   height: 50,
-                  child: CustomButton(text: "Login", onPressed: () => sendPhoneNumber()),
+                  child: CustomButton(text: "Login", onPressed: () => sendPhoneNumber(),),
                 )
               ],
             ),

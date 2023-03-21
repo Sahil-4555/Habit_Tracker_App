@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:habit_tracker/components/utils.dart';
 import 'package:habit_tracker/screens/home_screen.dart';
@@ -8,8 +11,9 @@ import 'package:pinput/pinput.dart';
 import 'package:provider/provider.dart';
 
 class OtpScreen extends StatefulWidget {
-  final String verificationId;
-  const OtpScreen({super.key, required this.verificationId});
+  String verificationId;
+  final String phoneNumber;
+  OtpScreen({super.key, required this.verificationId, required this.phoneNumber});
 
   @override
   State<OtpScreen> createState() => _OtpScreenState();
@@ -17,10 +21,13 @@ class OtpScreen extends StatefulWidget {
 
 class _OtpScreenState extends State<OtpScreen> {
   String? otpCode;
+  int start = 30;
+  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   @override
   Widget build(BuildContext context) {
     final isLoading =
         Provider.of<AuthProvider>(context, listen: true).isLoading;
+    final authProv = Provider.of<AuthProvider>(context, listen: false);
     return Scaffold(
       body: SingleChildScrollView(
         child: SafeArea(
@@ -123,9 +130,31 @@ class _OtpScreenState extends State<OtpScreen> {
                             color: Colors.black38,
                           ),
                         ),
-                        const SizedBox(height: 15),
+                        // const SizedBox(height: 15),
+                        // RichText(
+                        //   text: TextSpan(
+                        //     children: [
+                        //       const TextSpan(
+                        //         text: "Send OTP again in ",
+                        //         style: TextStyle(
+                        //             fontSize: 15, color: Colors.black38),
+                        //       ),
+                        //       TextSpan(
+                        //         text: "00:$start",
+                        //         style: const TextStyle(
+                        //             fontSize: 15, color: Colors.red),
+                        //       ),
+                        //       const TextSpan(
+                        //         text: " Sec",
+                        //         style: TextStyle(
+                        //             fontSize: 15, color: Colors.black38),
+                        //       ),
+                        //     ],
+                        //   ),
+                        // ),
+                        const SizedBox(height: 25),
                         GestureDetector(
-                          onTap: () {},
+                          onTap: resendOTP,
                           child: const Text(
                             'Resend New Code',
                             style: TextStyle(
@@ -142,6 +171,47 @@ class _OtpScreenState extends State<OtpScreen> {
         ),
       ),
     );
+  }
+
+  void StartTimer() {
+    const onsec = Duration(seconds: 1);
+    Timer timer = Timer.periodic(
+      onsec,
+      (timer) {
+        if (start == 0) {
+          setState(
+            () {
+              timer.cancel();
+            },
+          );
+        } else {
+          setState(() {
+            start--;
+          });
+        }
+        ;
+      },
+    );
+  }
+
+  void resendOTP() async {
+    try {
+      await _firebaseAuth.verifyPhoneNumber(
+        phoneNumber: widget.phoneNumber,
+        verificationCompleted: (PhoneAuthCredential phoneAuthCredential) async {
+          await _firebaseAuth.signInWithCredential(phoneAuthCredential);
+        },
+        verificationFailed: (error) {
+          throw Exception(error.message);
+        },
+        codeSent: (verificationId, forceResendingToken) {
+          widget.verificationId = verificationId;
+        },
+        codeAutoRetrievalTimeout: (verificationId) {},
+      );
+    } on FirebaseAuthException catch (e) {
+      showSnackBar(context, e.message.toString());
+    }
   }
 
   void verifyOtp(BuildContext context, String userOtp) {
@@ -167,9 +237,6 @@ class _OtpScreenState extends State<OtpScreen> {
                       )));
             } else {
               //New User
-
-
-              
               Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(
