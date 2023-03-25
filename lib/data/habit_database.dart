@@ -91,6 +91,8 @@ class HabitDatabase {
       // day
       int day = startDate.add(Duration(days:i)).day;
 
+
+
       final percentForEachDay = <DateTime,int> {
         DateTime(year,month,day):(10 * strengthAsPercent).toInt(),
       };

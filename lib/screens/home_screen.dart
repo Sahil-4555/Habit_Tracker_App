@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:habit_tracker/components/month_summary.dart';
 import 'package:habit_tracker/data/habit_database.dart';
+import 'package:habit_tracker/screens/show_user_data.dart';
 import 'package:habit_tracker/screens/welcome_screen.dart';
 import 'package:habit_tracker/services/auth_provider.dart';
 import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
 
 import '../components/my_alert_box.dart';
+import '../components/next_screen.dart';
 import 'habit_tile.dart';
 import '../components/my_fab.dart';
 
@@ -125,7 +128,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final auth_prov = Provider.of<AuthProvider>(context, listen: false);
+
     return Scaffold(
         backgroundColor: Colors.grey[300],
         floatingActionButton: MyFloatingActionButton(
@@ -192,6 +195,47 @@ class _HomeScreenState extends State<HomeScreen> {
               },
             ),
           ],
-        ));
+        ),
+      bottomNavigationBar: Container(
+        color: Colors.green,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+          child: GNav(
+            backgroundColor: Colors.green,
+            color: Colors.white,
+            activeColor: Colors.white,
+            tabBackgroundColor: Colors.greenAccent,
+            gap: 8,
+            selectedIndex: 0,
+            padding: const EdgeInsets.all(5),
+            tabs: [
+              GButton(
+                icon: Icons.home,
+                text: "home",
+                onPressed: () {
+                  nextScreen(context, const HomeScreen());
+                },
+              ),
+              GButton(
+                icon: Icons.person,
+                text: "favorite",
+                onPressed: () {
+                  nextScreen(context, const UserDetails());
+                },
+              ),
+              const GButton(
+                icon: Icons.settings,
+                text: "settings",
+              ),
+              const GButton(
+                icon: Icons.search,
+                text: "search",
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+
   }
 }

@@ -26,16 +26,16 @@ class HabitTile extends StatelessWidget {
           children: [
             // setting option
             SlidableAction(
-            onPressed: settingsTapped,
-            backgroundColor: Colors.grey.shade800,
-            icon: Icons.settings,
-            borderRadius: BorderRadius.circular(12)),
+                onPressed: settingsTapped,
+                backgroundColor: Colors.grey.shade800,
+                icon: Icons.settings,
+                borderRadius: BorderRadius.circular(12)),
             // delete option
             SlidableAction(
-              onPressed: deleteTapped,
-              backgroundColor: Colors.red.shade400,
-              icon: Icons.delete,
-              borderRadius: BorderRadius.circular(12)),
+                onPressed: deleteTapped,
+                backgroundColor: Colors.red.shade400,
+                icon: Icons.delete,
+                borderRadius: BorderRadius.circular(12)),
           ],
         ),
         child: Container(
@@ -44,29 +44,29 @@ class HabitTile extends StatelessWidget {
             color: Colors.grey[100],
             borderRadius: BorderRadius.circular(12),
           ),
-            child: Expanded(
-              child: Row(
-                children: [
-                  Checkbox(
-                    value: habitCompleted,
-                    onChanged: onChanged,
-                  ),
-
-                  Text(habitName,style: TextStyle(fontSize: 16),),
-
-                  const Expanded(
+          child: Expanded(
+            child: Row(
+              children: [
+                Checkbox(
+                  value: habitCompleted,
+                  onChanged: onChanged,
+                ),
+                Text(
+                  habitName,
+                  style: TextStyle(fontSize: 16),
+                ),
+                const Expanded(
                   child: Align(
                     alignment: Alignment.centerRight,
                     child: Icon(
                       Icons.arrow_back_rounded,
                       color: Colors.grey,
                     ),
-                  )
-
-                  )
-                ],
-              ),
+                  ),
+                ),
+              ],
             ),
+          ),
         ),
       ),
     );
